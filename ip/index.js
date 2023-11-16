@@ -1,4 +1,5 @@
 //axios import buraya gelecek
+import axios from "axios";
 
 var benimIP;
 
@@ -30,6 +31,14 @@ async function ipAdresimiAl(){
 	NOT: Bilgisayarın IP adresini öğrenmek için: https://apis.ergineer.com/ipadresim 
 	ADIM 5'e gelene kadar fonksiyonunuzu test etmek için ip nizi URL'ye manuel olarak ekleyebilirsiniz.
 */
+benimIP="46.197.117.88";
+axios.get(`https://apis.ergineer.com/ipgeoapi/${benimIP}`)
+.then((response)=>{
+	console.log("ıp yüklendi=",response);
+	
+    document.querySelector(".cards").append(cardOlustur(response.data))
+
+})
 
 /*
 	ADIM 2: Geri döndürülen verileri inceleyin, bu sizin ip bilgileriniz! Bileşen fonksiyonunuzu geliştirmek içindeki bu veri yapısını
@@ -53,6 +62,53 @@ async function ipAdresimiAl(){
 	</div>
     </div>
 */
+    const cardOlustur=(nesne)=>{
+      const genelCard=document.createElement("div");
+ 	 genelCard.classList.add("card");
+
+ 	 const baryrakImg=document.createElement("img");
+ 	 baryrakImg.setAttribute("src",`https://flagsapi.com/:${nesne.ülkeKodu}/:style/:size.png`);
+      genelCard.append(baryrakImg);
+
+ 	 const cardİnfo=document.createElement("div");
+ 	 cardİnfo.classList.add("card-info");
+ 	 genelCard.append(cardİnfo);
+ 
+ 	 //card info içrekikleri buradan sonrasını card infoya append etmeyi unutma!!
+      const başlık=document.createElement("h3");
+ 	 başlık.classList.add("ip");
+      başlık.textContent=nesne.sorgu;
+ 	 cardİnfo.append(başlık);
+
+ 	  const ulke=document.createElement("p");
+ 	  ulke.classList.add("ulke");
+ 	  ulke.textContent=`${nesne.ülke} (${nesne.ülkeKodu})`;
+ 	  cardİnfo.append(ulke);
+
+ 	 const enlemBoylam=document.createElement("p");
+ 	 enlemBoylam.textContent=`Enlem:${nesne.enlem} Boylam:${nesne.boylam}`;
+      cardİnfo.append(enlemBoylam);
+
+ 	 const sehir=document.createElement("p");
+ 	 sehir.textContent=`Sehir:${nesne.şehir}`;
+      cardİnfo.append(sehir);
+
+ 	 const saatDilimi=document.createElement("p");
+ 	 saatDilimi.textContent=`Saat dilimi: ${nesne.saatdilimi}`;
+      cardİnfo.append(saatDilimi);
+
+ 	 const paraBirimi=document.createElement("p");
+ 	 paraBirimi.textContent=`Para birimi: ${nesne.parabirimi}`;
+      cardİnfo.append(paraBirimi);
+
+ 	 const ısp=document.createElement("p");
+ 	 ısp.textContent=`ISP: ${nesne.isp}`;
+      cardİnfo.append(ısp);
+
+	  return genelCard;
+
+    }
+ 
 
 /*
 	ADIM 4: API'den alınan verileri kullanarak ADIM 3'te verilen yapıda bir kart oluşturun ve 
